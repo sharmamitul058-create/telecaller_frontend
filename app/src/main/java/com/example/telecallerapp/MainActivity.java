@@ -3,9 +3,11 @@ package com.example.telecallerapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +22,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar(findViewById(R.id.toolbar));
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerRecent = findViewById(R.id.recyclerRecentActivity);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this));
+        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+
+        toolbar.setNavigationOnClickListener(v -> {
+            drawerLayout.openDrawer(GravityCompat.START);
+        });
+
 
         ArrayList<String[]> recentList = new ArrayList<>();
         recentList.add(new String[]{"John Doe", "No answer • Added to callback list", "2m ago"});
@@ -48,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         cardInterested.setOnClickListener(v -> openLeadsScreen("Interested"));
 
         // Drawer
-        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
 
         findViewById(R.id.menuSettings).setOnClickListener(v -> {
             drawerLayout.closeDrawers();
@@ -95,4 +104,10 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("type", type);
         startActivity(intent);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }
+
 }

@@ -6,6 +6,33 @@
     android:background="#F4F6FA"
     android:padding="16dp">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Active"
+            android:layout_weight="1"
+            android:backgroundTint="#E3F2FD"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Inactive"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+
     <!-- HEADER -->
     <TextView
         android:layout_width="wrap_content"
