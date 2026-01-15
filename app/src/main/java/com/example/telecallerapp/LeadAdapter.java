@@ -1,5 +1,7 @@
 package com.example.telecallerapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +13,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
-    private ArrayList<String> leads;
+    private ArrayList<Lead> leadList;
 
-    public LeadAdapter(ArrayList<String> leads) {
-        this.leads = leads;
+    public LeadAdapter(ArrayList<Lead> leadList) {
+        this.leadList = leadList;
     }
 
     @NonNull
@@ -32,114 +38,89 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        String lead = leads.get(position);
-        String[] data = lead.split(" - ");
+        Lead lead = leadList.get(position);
 
-        if (data.length < 3) return; // safety check
-
-        String name = data[0];
-        String phone = data[1];
-        String status = data[2];
-
-        holder.tvName.setText(name);
-        holder.tvPhone.setText(phone);
-        holder.tvStatus.setText(status);
+        holder.tvName.setText(lead.name);
+        holder.tvPhone.setText(lead.phone);
+        holder.tvStatus.setText(lead.status);
 
         holder.layoutActions.setVisibility(View.GONE);
-        holder.btnSchedule.setVisibility(View.GONE);
 
-        // Show buttons ONLY for Fresh & Interested
-        if (status.equalsIgnoreCase("Fresh")) {
+        if ("Fresh".equalsIgnoreCase(lead.status)) {
             holder.layoutActions.setVisibility(View.VISIBLE);
-            holder.btnSchedule.setVisibility(View.GONE);
             holder.btnCall.setVisibility(View.VISIBLE);
-            holder.btnMessage.setVisibility(View.GONE);
-            holder.btnViewDetail.setVisibility(View.VISIBLE);
-            holder.btnUpdate.setVisibility(View.GONE);
             holder.btnConvert.setVisibility(View.GONE);
             holder.btnNurture.setVisibility(View.GONE);
-        } else if (status.equalsIgnoreCase("Contacted")) {
+            holder.btnSchedule.setVisibility(View.GONE);
+            holder.btnUpdate.setVisibility(View.GONE);
+            holder.btnMessage.setVisibility(View.GONE);
+        }
+        else if ("Contacted".equalsIgnoreCase(lead.status)) {
             holder.layoutActions.setVisibility(View.VISIBLE);
             holder.btnSchedule.setVisibility(View.VISIBLE);
-            holder.btnUpdate.setVisibility(View.VISIBLE);
-            holder.btnMessage.setVisibility(View.GONE);
+            holder.btnMessage.setVisibility(View.VISIBLE);
             holder.btnCall.setVisibility(View.GONE);
             holder.btnViewDetail.setVisibility(View.GONE);
+            holder.btnUpdate.setVisibility(View.GONE);
             holder.btnConvert.setVisibility(View.GONE);
             holder.btnNurture.setVisibility(View.GONE);
 
-
-        }else if(status.equalsIgnoreCase("Interested")){
+        }
+        else if ("Interested".equalsIgnoreCase(lead.status)) {
             holder.layoutActions.setVisibility(View.VISIBLE);
-            holder.btnSchedule.setVisibility(View.GONE);
-            holder.btnCall.setVisibility(View.GONE);
-            holder.btnMessage.setVisibility(View.GONE);
-            holder.btnViewDetail.setVisibility(View.GONE);
-            holder.btnUpdate.setVisibility(View.GONE);
             holder.btnConvert.setVisibility(View.VISIBLE);
             holder.btnNurture.setVisibility(View.VISIBLE);
+            holder.btnSchedule.setVisibility(View.GONE);
+            holder.btnCall.setVisibility(View.GONE);
+            holder.btnUpdate.setVisibility(View.GONE);
+            holder.btnMessage.setVisibility(View.GONE);
         }
 
-        else {
-            holder.layoutActions.setVisibility(View.GONE);
-        }
+        holder.btnCall.setOnClickListener(v -> {
 
-        // Frontend-only dummy actions
-        holder.btnCall.setOnClickListener(v ->
-                Toast.makeText(v.getContext(), "Calling " + phone, Toast.LENGTH_SHORT).show()
-        );
+            // Open dialer
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + lead.phone));
+            v.getContext().startActivity(intent);
 
-        holder.btnMessage.setOnClickListener(v ->
-                Toast.makeText(v.getContext(), "Messaging " + phone, Toast.LENGTH_SHORT).show()
-        );
-        holder.btnSchedule.setOnClickListener(v ->
-                Toast.makeText(v.getContext(), "Scheduling"+ phone, Toast.LENGTH_SHORT).show());
-        holder.btnViewDetail.setOnClickListener(v ->
-        Toast.makeText(v.getContext(), "Viewing"+ phone, Toast.LENGTH_SHORT).show());
-        holder.btnUpdate.setOnClickListener(v ->
-                Toast.makeText(v.getContext(), "Updating..."+ phone, Toast.LENGTH_SHORT).show());
-        holder.btnNurture.setOnClickListener(v ->
-                Toast.makeText(v.getContext(),
-                        "Nurturing " + holder.tvName.getText(),
-                        Toast.LENGTH_SHORT).show()
-        );
+            // Update status to Contacted
+            String userId = FirebaseAuth.getInstance().getUid();
+            if (userId == null||lead.id==null) return;
 
-        holder.btnConvert.setOnClickListener(v ->
-                Toast.makeText(v.getContext(),
-                        "Converted " + holder.tvName.getText(),
-                        Toast.LENGTH_SHORT).show()
-        );
+            DatabaseReference ref = FirebaseDatabase.getInstance()
+                    .getReference("leads")
+                    .child(userId)
+                            .child(lead.id);
 
 
+            ref.child("status").setValue("Contacted");
+
+    });
     }
 
     @Override
     public int getItemCount() {
-        return leads.size();
+        return leadList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvName, tvPhone, tvStatus;
-        Button btnCall, btnMessage, btnSchedule, btnViewDetail, btnUpdate, btnNurture, btnConvert;
+        Button btnCall, btnSchedule, btnConvert, btnNurture, btnViewDetail, btnUpdate, btnMessage;
         LinearLayout layoutActions;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-
             tvName = itemView.findViewById(R.id.tvName);
             tvPhone = itemView.findViewById(R.id.tvPhone);
             tvStatus = itemView.findViewById(R.id.tvStatus);
-
-            btnCall = itemView.findViewById(R.id.btnCall);
-            btnMessage = itemView.findViewById(R.id.btnMessage);
-            btnSchedule = itemView.findViewById(R.id.btnSchedule);
             btnViewDetail = itemView.findViewById(R.id.btnViewDetail);
+            btnCall = itemView.findViewById(R.id.btnCall);
+            btnSchedule = itemView.findViewById(R.id.btnSchedule);
             btnUpdate = itemView.findViewById(R.id.btnUpdate);
-            btnNurture = itemView.findViewById(R.id.btnNurture);
+            btnMessage = itemView.findViewById(R.id.btnMessage);
             btnConvert = itemView.findViewById(R.id.btnConvert);
+            btnNurture = itemView.findViewById(R.id.btnNurture);
             layoutActions = itemView.findViewById(R.id.layoutActions);
         }
     }
 }
-

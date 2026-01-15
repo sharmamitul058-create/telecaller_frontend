@@ -52,7 +52,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="  DONOR DETAILS"
+                        android:text=" DONOR DETAILS"
                         android:textStyle="bold"
                         android:textSize="12sp"
                         android:textColor="#1E88E5"/>
@@ -60,11 +60,13 @@
 
                 <EditText
                     android:hint="Donor Name"
+                    android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <EditText
                     android:hint="Mobile Number"
+                    android:id="@+id/etPhone"
                     android:inputType="phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,6 +74,7 @@
 
                 <EditText
                     android:hint="Location"
+                    android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"/>
@@ -118,6 +121,7 @@
 
                 <EditText
                     android:hint="Donation Amount (₹)"
+                    android:id="@+id/etAmount"
                     android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

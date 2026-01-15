@@ -26,9 +26,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-        findViewById(R.id.btnEditProfile).setOnClickListener(v ->
-                startActivity(new Intent(this, EditProfileActivity.class)));
-
+        findViewById(R.id.btnEditProfile).setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+        });
         findViewById(R.id.btnLogout).setOnClickListener(v ->
                 showLogoutDialog());
     }

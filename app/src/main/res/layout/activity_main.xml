@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F4F6FA">
-
+    <!--Signup page-->
     <!-- MAIN CONTENT -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -148,6 +148,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+
                     android:orientation="vertical">
 
                     <ImageView
@@ -159,9 +163,11 @@
                         app:tint="@android:color/white" />
 
                     <TextView
+                        android:id="@+id/btnStartDialing"
                         android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
+
                         android:text="Start Dialing"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -172,6 +178,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
 
                     <ImageView
@@ -180,9 +189,10 @@
                         android:background="@drawable/circle_light"
                         android:padding="12dp"
                         android:src="@android:drawable/ic_menu_add"
-                        app:tint="#1E88E5" />
+                        app:tint="#1F88F2" />
 
                     <TextView
+                        android:id="@+id/btnAddLead"
                         android:layout_width="69dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
@@ -298,14 +308,18 @@
                 />
 
             <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sarah Jenkins"
+
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp" />
 
             <TextView
+                android:id="@+id/menuProfile"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="View Profile"

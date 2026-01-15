@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,10 +11,12 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+
         <!-- TITLE -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/imgProfile"
             android:text="Edit Profile"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -49,7 +52,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Sarah Jenkins"
+            android:id="@+id/etName"
+            android:hint="Full Name"
             android:background="@android:color/white"
             android:padding="12dp"
             android:layout_marginBottom="16dp"/>
@@ -63,8 +67,9 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="sarah.j@company.com"
-            android:inputType="textEmailAddress"
+            android:id="@+id/etEmail"
+            android:enabled="false"
+            android:hint="Email Address"
             android:background="@android:color/white"
             android:padding="12dp"
             android:layout_marginBottom="16dp"/>
@@ -78,7 +83,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="+1 (555) 123-4567"
+            android:id="@+id/etPhone"
             android:inputType="phone"
             android:background="@android:color/white"
             android:padding="12dp"
@@ -110,3 +115,4 @@
 
     </LinearLayout>
 </ScrollView>
+
