@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "115268131178",
+    "project_id": "telecallerapp-database",
+    "storage_bucket": "telecallerapp-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115268131178:android:e8ca2d91b5826a33be2d13",
+        "android_client_info": {
+          "package_name": "com.example.telecallerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADeaxADTPPCenPngrputMVLQnL3Vjv_Zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
