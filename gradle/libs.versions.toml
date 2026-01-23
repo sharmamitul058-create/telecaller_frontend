@@ -13,6 +13,7 @@ firebaseAuth = "24.0.1"
 firebaseBom = "32.7.0"
 googleServices = "4.4.4"
 firebaseStorage = "22.0.1"
+materialVersion = "1.13.0"
 
 
 [libraries]
@@ -27,6 +28,7 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

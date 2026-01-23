@@ -1,57 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F6F1FA"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:padding="16dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- HEADER -->
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Prasadam Form"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginBottom="12dp"/>
 
-        <EditText
-            android:hint="Telecaller Name"
-            android:enabled="false"
-            android:text="Anjali Sharma"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <!-- Logged By -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logged By (Telecaller Name)"
+            android:textSize="12sp"
+            android:textColor="#6B6B6B"
+            android:layout_marginBottom="4dp"/>
 
-        <EditText
-            android:hint="Donor Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:hint="Mobile Number"
-            android:inputType="phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:hint="Amount Donated (₹)"
-            android:inputType="numberDecimal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:hint="Shipping Address"
-            android:minLines="3"
-            android:gravity="top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/btnSubmitPrasadam"
-            android:text="Submit Prasadam"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_lock">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:text="Name"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Date of Donation -->
+        <EditText
+            android:id="@+id/etDateOfDonation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="mm/dd/yyyy"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none"
+            android:drawableEnd="@drawable/ic_calendar"/>
+
+
+
+
+
+        <!-- Donor Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name of Donor *"
+            android:textSize="12sp"
+            android:textColor="#6B6B6B"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="Enter donor's full name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Mobile Number -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mobile No *"
+            android:textSize="12sp"
+            android:textColor="#6B6B6B"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="Enter donor's mobile number"
+                android:inputType="phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Amount -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount Donated *"
+            android:textSize="12sp"
+            android:textColor="#6B6B6B"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_rupee">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="0.00"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Address -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shipping Address"
+            android:textSize="12sp"
+            android:textColor="#6B6B6B"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="Enter complete address for prasadam delivery..."
+                android:minLines="3"
+                android:gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- SUBMIT BUTTON -->
+        <Button
+            android:id="@+id/btnSubmitPrasadam"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="24dp"
+            android:text="Submit Prasadam"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/bg_submit_button"
+            android:backgroundTint="#8080FF"
+            />
+
     </LinearLayout>
-</ScrollView>
+
+</androidx.core.widget.NestedScrollView>

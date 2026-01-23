@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_dashboard"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Dashboard"/>
+
+    <item
+        android:id="@+id/nav_leads"
+        android:icon="@drawable/ic_leads"
+        android:title="Leads"/>
+
+    <item
+        android:id="@+id/nav_campaigns"
+        android:icon="@drawable/ic_campaign"
+        android:title="Campaigns"/>
+
+    <item
+        android:id="@+id/nav_call_stats"
+        android:icon="@drawable/ic_call_stats"
+        android:title="Call Stats"/>
+
+</menu>

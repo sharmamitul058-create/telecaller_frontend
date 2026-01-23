@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telecallerapp.databinding.ActivityMainBinding;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,17 +35,72 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         auth = FirebaseAuth.getInstance();
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LinearLayout actionAddLead = findViewById(R.id.actionAddLead);
+        LinearLayout btnStartDialing = findViewById(R.id.btnStartDialing);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_dashboard) {
+                return true;
+            } else if (id == R.id.nav_leads) {
+                openLeadsScreen("ALL");
+                return true;
+            } else if (id == R.id.nav_campaigns) {
+                startActivity(new Intent(this, CampaignsActivity.class));
+                return true;
+            } else if (id == R.id.nav_call_stats) {
+                startActivity(new Intent(this, CallStatusActivity.class));
+                return true;
+            }
+            return false;
+        });
+
+
+
+        bottomNav.setSelectedItemId(R.id.nav_dashboard);
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_dashboard) {
+                return true; // already here
+            }
+
+            if (id == R.id.nav_leads) {
+                // SAME as drawer "All Leads"
+                openLeadsScreen("ALL");
+                return true;
+            }
+
+            if (id == R.id.nav_campaigns) {
+                startActivity(new Intent(this, CampaignsActivity.class));
+                return true;
+            }
+
+            if (id == R.id.nav_call_stats) {
+                startActivity(new Intent(this, CallStatusActivity.class));
+                return true;
+            }
+
+
+            return false;
+        });
+
 
 
 
         RecyclerView recyclerRecent = findViewById(R.id.recyclerRecentActivity);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this));
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+
 
         toolbar.setNavigationOnClickListener(v -> {
             drawerLayout.openDrawer(GravityCompat.START);
@@ -67,10 +125,15 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
         });
 
-        findViewById(R.id.btnAddLead).setOnClickListener(v -> {
-            startActivity(new Intent(this, AddLeadActivity.class));
+
+        actionAddLead.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, AddLeadActivity.class));
         });
 
+        btnStartDialing.setOnClickListener(v ->{
+            startActivity(new Intent(MainActivity.this,LeadActivity.class
+            ));
+        });
 
 
 

@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Light purple circle background -->
+    <path
+        android:fillColor="#EFE7FD"
+        android:pathData="M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2Z"/>
+
+    <!-- Phone (dialing) icon -->
+    <path
+        android:fillColor="#7E57C2"
+        android:pathData="M6.6,10.8c1.2,2.4 3.2,4.4 5.6,5.6l1.9-1.9c0.2-0.2 0.5-0.3 0.8-0.2 0.9,0.3 1.9,0.5 2.9,0.5 0.4,0 0.7,0.3 0.7,0.7v3c0,0.4-0.3,0.7-0.7,0.7C10.4,19.7 4.3,13.6 4.3,6.2c0-0.4 0.3-0.7 0.7-0.7h3c0.4,0 0.7,0.3 0.7,0.7 0,1 0.2,2 0.5,2.9 0.1,0.3 0,0.6-0.2,0.8z"/>
+</vector>
