@@ -1,5 +1,6 @@
 package com.example.telecallerapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,17 @@ public class ProfileActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
         tvRole = findViewById(R.id.tvRole);
+        SharedPreferences prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE);
+
+        String name = prefs.getString("USER_NAME", "");
+        String email = prefs.getString("USER_EMAIL", "");
+
+        TextView tvName = findViewById(R.id.tvName);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+
+        tvName.setText(name);
+        tvEmail.setText(email);
+
 
         String uid = FirebaseAuth.getInstance().getUid();
         if (uid == null) {
@@ -37,6 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         TextView tvUserName = findViewById(R.id.tvName);
+
+
         TextView tvUserEmail = findViewById(R.id.tvEmail);
 
         if (uid != null) {
@@ -46,8 +60,11 @@ public class ProfileActivity extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(snapshot -> {
                         if (snapshot.exists()) {
-                            String name = snapshot.child("name").getValue(String.class);
-                            String email = snapshot.child("email").getValue(String.class);
+
+                            String firebasename = snapshot.child("name").getValue(String.class);
+                            String firebaseemail = snapshot.child("email").getValue(String.class);
+                            tvUserName.setText(firebasename);
+                            tvUserEmail.setText(firebaseemail);
 
                             tvName.setText(name != null ? name : "User");
                             tvEmail.setText(email != null ? email : auth.getCurrentUser().getEmail());

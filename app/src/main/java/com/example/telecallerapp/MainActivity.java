@@ -1,6 +1,7 @@
 package com.example.telecallerapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,10 +102,29 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerRecent = findViewById(R.id.recyclerRecentActivity);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this));
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        TextView menuProfile = drawerLayout.findViewById(R.id.menuProfile);
+        TextView tvName = findViewById(R.id.tvName);
+
+        SharedPreferences prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE);
+        String name = prefs.getString("USER_NAME",null);
+
+        tvName.setText(name);
+
+
+        if (name != null && !name.isEmpty()) {
+            tvName.setText(name);
+        } else {
+            tvName.setText("User");
+        }
+
 
 
         toolbar.setNavigationOnClickListener(v -> {
             drawerLayout.openDrawer(GravityCompat.START);
+        });
+        menuProfile.setOnClickListener(v->{
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         });
 
 
@@ -120,10 +141,7 @@ public class MainActivity extends AppCompatActivity {
             openLeadsScreen("Fresh");
 
         });
-        findViewById(R.id.menuProfile).setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-            drawerLayout.closeDrawers();
-        });
+
 
 
         actionAddLead.setOnClickListener(v -> {

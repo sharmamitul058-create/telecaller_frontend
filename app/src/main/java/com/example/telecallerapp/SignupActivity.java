@@ -1,7 +1,9 @@
 package com.example.telecallerapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,12 +37,22 @@ public class SignupActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         setContentView(binding.getRoot());
 
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         binding.btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText etName = findViewById(R.id.etName);
+                String enteredUserName = etName.getText().toString().trim();
+
+
+                SharedPreferences prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("USER_NAME", enteredUserName); //
+                editor.apply();
+
                 auth.createUserWithEmailAndPassword(binding.etEmailAddress.getText().toString(), binding.etPassword.getText().toString()).
                         addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                                                                                                                                                     @Override
