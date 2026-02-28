@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
@@ -19,27 +21,72 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.cloudinary.android.MediaManager;
 import com.example.telecallerapp.databinding.ActivityMainBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding biding;
     FirebaseAuth auth;
+    ImageView imgProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        auth = FirebaseAuth.getInstance();
+
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+
+        imgProfile = drawerLayout.findViewById(R.id.imgProfile);
+        TextView tvName = drawerLayout.findViewById(R.id.tvName);
+
+        auth = FirebaseAuth.getInstance();
+        String uid = auth.getUid();
+
+        if(uid == null){
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(uid)
+                .child("profileImage")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            Glide.with(MainActivity.this)
+                                    .load(snapshot.getValue(String.class))
+                                    .circleCrop()
+                                    .into(imgProfile);
+                        }
+                    }
+
+                    @Override public void onCancelled(@NonNull DatabaseError error) {}
+                });
+
+
+
+
         LinearLayout actionAddLead = findViewById(R.id.actionAddLead);
         LinearLayout btnStartDialing = findViewById(R.id.btnStartDialing);
 
@@ -101,9 +148,10 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerRecent = findViewById(R.id.recyclerRecentActivity);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this));
-        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+
         TextView menuProfile = drawerLayout.findViewById(R.id.menuProfile);
-        TextView tvName = findViewById(R.id.tvName);
+
+
 
         SharedPreferences prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE);
         String name = prefs.getString("USER_NAME",null);
@@ -210,6 +258,38 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadProfileImage();
+    }
+        private void loadProfileImage() {
+
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(uid)
+                .child("profileImage")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String url = snapshot.getValue(String.class);
+
+                            Glide.with(MainActivity.this)
+                                    .load(url)
+                                    .circleCrop()
+                                    .into(imgProfile);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+    }
+
 
     private void openLeadsScreen(String type) {
         Intent intent = new Intent(MainActivity.this, LeadActivity.class);

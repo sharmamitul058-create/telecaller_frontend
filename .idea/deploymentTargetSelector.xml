@@ -15,7 +15,7 @@
       </SelectionState>
       <SelectionState runConfigName="TelecallerAPP">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-01-23T05:50:23.978989300Z">
+        <DropdownSelection timestamp="2026-02-15T10:38:11.238981500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\MITUL SHARMA\.android\avd\Pixel_4.avd" />
