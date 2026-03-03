@@ -31,12 +31,14 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding biding;
@@ -146,8 +148,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         RecyclerView recyclerRecent = findViewById(R.id.recyclerRecentActivity);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this));
+        loadRecentActivity();
 
         TextView menuProfile = drawerLayout.findViewById(R.id.menuProfile);
 
@@ -176,19 +180,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        ArrayList<String[]> recentList = new ArrayList<>();
-        recentList.add(new String[]{"John Doe", "No answer • Added to callback list", "2m ago"});
-        recentList.add(new String[]{"Sarah Smith", "Callback scheduled • Pricing inquiry", "2:00 PM"});
-        recentList.add(new String[]{"Michael Key", "Deal closed • Contract sent", "1h ago"});
-
-        RecentActivityAdapter adapter =
-                new RecentActivityAdapter(recentList);
-        recyclerRecent.setAdapter(adapter);
-
         findViewById(R.id.btnStartDialing).setOnClickListener(v -> {
             openLeadsScreen("Fresh");
 
-        });
+
+
+
+            });
+
 
 
 
@@ -197,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnStartDialing.setOnClickListener(v ->{
+
             startActivity(new Intent(MainActivity.this,LeadActivity.class
             ));
         });
@@ -257,6 +257,47 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, CallStatusActivity.class));
 
         });
+    }
+
+    private void loadRecentActivity() {
+
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(uid)
+                .child("RecentActivity");
+
+        ref.orderByChild("timestamp")
+                .limitToLast(10)
+                .addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        ArrayList<String[]> list = new ArrayList<>();
+
+                        for (DataSnapshot snap : snapshot.getChildren()) {
+
+                            String name = snap.child("leadName").getValue(String.class);
+                            String action = snap.child("action").getValue(String.class);
+
+                            if (name != null && action != null) {
+                                list.add(new String[]{name, action, "Now"});
+                            }
+                        }
+
+                        Collections.reverse(list);
+
+                        RecyclerView recyclerRecent = findViewById(R.id.recyclerRecentActivity);
+                        recyclerRecent.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        recyclerRecent.setAdapter(new RecentActivityAdapter(list));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
     }
     @Override
     protected void onResume() {

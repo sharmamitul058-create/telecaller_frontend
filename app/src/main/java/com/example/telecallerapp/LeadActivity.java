@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.example.telecallerapp.Models.RecentActivityModel;
 
 public class LeadActivity extends AppCompatActivity {
 
@@ -76,5 +77,22 @@ public class LeadActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
+    }
+    private void addRecentActivity(String leadName, String action) {
+
+        String uid = FirebaseAuth.getInstance().getUid();
+        if(uid == null) return;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(uid)
+                .child("RecentActivity");
+
+        String key = ref.push().getKey();
+
+        RecentActivityModel model =
+                new RecentActivityModel(leadName, action, System.currentTimeMillis());
+
+        ref.child(key).setValue(model);
     }
 }

@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import com.example.telecallerapp.Models.RecentActivityModel;
 
 public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
@@ -25,6 +26,26 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
     public LeadAdapter(ArrayList<Lead> leadList) {
         this.leadList = leadList;
+    }
+
+    private void addRecentActivity(String leadName, String action) {
+
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(uid)
+                .child("RecentActivity");
+
+        String key = ref.push().getKey();
+
+        if (key == null) return;
+
+        RecentActivityModel model =
+                new RecentActivityModel(leadName, action, System.currentTimeMillis());
+
+        ref.child(key).setValue(model);
     }
 
     @NonNull
@@ -83,19 +104,26 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
             intent.setData(Uri.parse("tel:" + lead.phone));
             v.getContext().startActivity(intent);
 
+            // Add to Recent Activity
+            addRecentActivity(lead.name, "Dialed Lead");
+
             // Update status to Contacted
             String userId = FirebaseAuth.getInstance().getUid();
-            if (userId == null||lead.id==null) return;
+            if (userId == null || lead.id == null) return;
 
             DatabaseReference ref = FirebaseDatabase.getInstance()
                     .getReference("leads")
                     .child(userId)
-                            .child(lead.id);
-
+                    .child(lead.id);
 
             ref.child("status").setValue("Contacted");
+        });
+        holder.btnMessage.setOnClickListener(v -> {
 
-    });
+            addRecentActivity(lead.name, "Message Sent");
+
+            Toast.makeText(v.getContext(), "Message Clicked", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
