@@ -19,6 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import com.example.telecallerapp.Models.RecentActivityModel;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import java.util.Calendar;
 
 public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
@@ -120,10 +123,13 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
         });
         holder.btnMessage.setOnClickListener(v -> {
 
-            addRecentActivity(lead.name, "Message Sent");
+            Intent intent = new Intent(v.getContext(), MessageTemplatesActivity.class);
+            intent.putExtra("leadName", lead.name);
+            intent.putExtra("leadPhone", lead.phone);
 
-            Toast.makeText(v.getContext(), "Message Clicked", Toast.LENGTH_SHORT).show();
+            v.getContext().startActivity(intent);
         });
+
     }
 
     @Override
