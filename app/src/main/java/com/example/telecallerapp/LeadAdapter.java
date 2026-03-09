@@ -22,7 +22,9 @@ import com.example.telecallerapp.Models.RecentActivityModel;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import java.util.Calendar;
-
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import java.util.Calendar;
 public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
     private ArrayList<Lead> leadList;
@@ -78,8 +80,7 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
             holder.btnSchedule.setVisibility(View.GONE);
             holder.btnUpdate.setVisibility(View.GONE);
             holder.btnMessage.setVisibility(View.GONE);
-        }
-        else if ("Contacted".equalsIgnoreCase(lead.status)) {
+        } else if ("Contacted".equalsIgnoreCase(lead.status)) {
             holder.layoutActions.setVisibility(View.VISIBLE);
             holder.btnSchedule.setVisibility(View.VISIBLE);
             holder.btnMessage.setVisibility(View.VISIBLE);
@@ -89,8 +90,7 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
             holder.btnConvert.setVisibility(View.GONE);
             holder.btnNurture.setVisibility(View.GONE);
 
-        }
-        else if ("Interested".equalsIgnoreCase(lead.status)) {
+        } else if ("Interested".equalsIgnoreCase(lead.status)) {
             holder.layoutActions.setVisibility(View.VISIBLE);
             holder.btnConvert.setVisibility(View.VISIBLE);
             holder.btnNurture.setVisibility(View.VISIBLE);
@@ -129,7 +129,6 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
             v.getContext().startActivity(intent);
         });
-
     }
 
     @Override
