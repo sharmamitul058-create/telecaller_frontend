@@ -25,6 +25,9 @@ import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import java.util.Calendar;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import java.util.Calendar;
 public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
 
     private ArrayList<Lead> leadList;
@@ -69,6 +72,68 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.ViewHolder> {
         holder.tvName.setText(lead.name);
         holder.tvPhone.setText(lead.phone);
         holder.tvStatus.setText(lead.status);
+        holder.btnSchedule.setOnClickListener(v -> {
+
+            Calendar calendar = Calendar.getInstance();
+
+            DatePickerDialog datePicker = new DatePickerDialog(
+                    v.getContext(),
+                    (view, year, month, dayOfMonth) -> {
+
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        TimePickerDialog timePicker = new TimePickerDialog(
+                                v.getContext(),
+                                (timeView, hourOfDay, minute) -> {
+
+                                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                    calendar.set(Calendar.MINUTE, minute);
+
+                                    long followUpTime = calendar.getTimeInMillis();
+
+                                    String userId = FirebaseAuth.getInstance().getUid();
+                                    if (userId == null || lead.id == null) return;
+
+                                    DatabaseReference ref = FirebaseDatabase.getInstance()
+                                            .getReference("leads")
+                                            .child(userId)
+                                            .child(lead.id);
+
+                                    ref.child("followUpTime").setValue(followUpTime);
+
+                                    addRecentActivity(lead.name, "Follow-up Scheduled");
+
+                                    FollowUpNotificationHelper.scheduleReminder(
+                                            v.getContext(),
+                                            followUpTime,
+                                            lead.name,
+                                            lead.phone
+                                    );
+
+                                    Toast.makeText(
+                                            v.getContext(),
+                                            "Follow-up scheduled",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+                                },
+                                calendar.get(Calendar.HOUR_OF_DAY),
+                                calendar.get(Calendar.MINUTE),
+                                true
+                        );
+
+                        timePicker.show();
+
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+
+            datePicker.show();
+        });
 
         holder.layoutActions.setVisibility(View.GONE);
 
